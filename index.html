@@ -76,6 +76,15 @@ font-family:'Inter',system-ui,sans-serif;font-weight:400;color:var(--ink);line-h
 #kgx-root .kgx-opts button{text-align:left;color:#fff;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.16);padding:18px 20px;border-radius:16px;font-size:15.5px;transition:all .25s}
 #kgx-root .kgx-opts button:hover{border-color:var(--gold);transform:translateY(-2px)}
 #kgx-root .kgx-opts button.on{background:var(--gold);border-color:var(--gold);color:var(--pine);font-weight:600}
+#kgx-root .kgx-hint{display:flex;flex-direction:column;align-items:center;gap:10px;max-height:140px;margin:-18px auto 24px;text-align:center;transition:opacity .4s,max-height .5s,margin .5s}
+#kgx-root .kgx-hint span{display:inline-block;font-size:14.5px;font-weight:600;color:var(--pine);background:var(--gold2);padding:9px 20px;border-radius:99px;line-height:1.4;box-shadow:0 12px 26px -14px rgba(224,160,47,.9)}
+#kgx-root .kgx-hint svg{width:34px;height:34px;fill:none;stroke:var(--gold2);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;animation:kgx-bob 1.2s ease-in-out infinite}
+#kgx-root .kgx-hint.off{opacity:0;max-height:0;margin:0 auto;overflow:hidden;pointer-events:none}
+#kgx-root .kgx-opts:not(.kgx-done) button{animation:kgx-glow 2.2s ease-in-out infinite}
+#kgx-root .kgx-opts:not(.kgx-done) button:nth-child(even){animation-delay:.4s}
+@keyframes kgx-bob{0%,100%{transform:translateY(-4px);opacity:.55}50%{transform:translateY(8px);opacity:1}}
+@keyframes kgx-glow{0%,100%{border-color:rgba(255,255,255,.16)}50%{border-color:var(--gold)}}
+@media(prefers-reduced-motion:reduce){#kgx-root .kgx-hint svg,#kgx-root .kgx-opts button{animation:none!important}}
 #kgx-root .kgx-res{max-width:860px;margin:22px auto 0;background:#fff;color:var(--ink);border-radius:22px;padding:0 30px;max-height:0;overflow:hidden;opacity:0;transition:all .6s cubic-bezier(.2,.8,.2,1)}
 #kgx-root .kgx-res.on{max-height:420px;opacity:1;padding:30px}
 #kgx-root .kgx-res h3{font-size:26px;color:var(--pine)}
@@ -294,6 +303,7 @@ font-family:'Inter',system-ui,sans-serif;font-weight:400;color:var(--ink);line-h
 
 <section class="kgx-s kgx-test" id="kgx-test"><div class="kgx-w">
 <div class="kgx-hd"><span class="kgx-tag" style="color:var(--gold2);background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.2)">Test gratuit, 10 secondes</span><h2>D'où vient votre douleur ?</h2><p>Choisissez le signe qui vous ressemble le plus. C'est le test du chapitre 1 du guide.</p></div>
+<div class="kgx-hint" id="kgx-hint"><span>Cliquez sur la case qui vous ressemble pour voir votre résultat</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 5 6 6 6-6"/><path d="m6 12 6 6 6-6"/></svg></div>
 <div class="kgx-opts" id="kgx-opts"></div>
 <div class="kgx-res" id="kgx-res"></div>
 </div></section>
@@ -423,7 +433,7 @@ var Q=[
 ["Genou gonflé, chaud ou rouge","Inflammation active","Chapitres 2 et 7.","Avec de la fièvre, consultez rapidement."],
 ["Craquement après une torsion, genou qui lâche ou se bloque","Possible lésion","Chapitre 7 d'abord.","Consultez avant de commencer un programme d'exercices."]];
 var ob=$('#kgx-opts'),rs=$('#kgx-res');
-Q.forEach(function(q,i){var b=document.createElement('button');b.textContent=q[0];b.onclick=function(){$$('button',ob).forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+Q.forEach(function(q,i){var b=document.createElement('button');b.textContent=q[0];b.onclick=function(){$('#kgx-hint').classList.add('off');ob.classList.add('kgx-done');$$('button',ob).forEach(function(x){x.classList.remove('on')});b.classList.add('on');
 rs.className='kgx-res '+(q[3]?'warn':'ok');rs.innerHTML='<h3>'+q[1]+'</h3><p>'+q[2]+'</p>'+(q[3]?'<p class="kgx-w2">'+q[3]+'</p>':'')+'<p>Le guide vous donne le plan complet pour ce profil.</p><a href="#kgx-offre">Voir le guide</a>';
 requestAnimationFrame(function(){rs.classList.add('on')})};ob.appendChild(b)});
 /* faq */
